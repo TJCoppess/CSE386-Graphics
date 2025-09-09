@@ -253,7 +253,8 @@ double areaOfTriangle(double x1, double y1, double x2, double y2, double x3, dou
 
 void pointOnUnitCircle(double angleRads, double& x, double& y) {
 	/* CSE 386 - todo  */
-	x = y = 0;
+	x = glm::cos(angleRads);
+	y = glm::sin(angleRads);
 }
 
 /**
@@ -267,8 +268,7 @@ void pointOnUnitCircle(double angleRads, double& x, double& y) {
 */
 
 dvec2 pointOnCircle(const dvec2& center, double R, double angleRads) {
-	/* CSE 386 - todo  */
-	return dvec2(0, 0);;
+	return dvec2(center.x + R * cos(angleRads), center.y + R * sin(angleRads));
 }
 
 /**
@@ -287,8 +287,16 @@ dvec2 pointOnCircle(const dvec2& center, double R, double angleRads) {
 */
 
 double directionInRadians(const dvec2& referencePt, const dvec2& targetPt) {
-	/* CSE 386 - todo  */
-	return 0;
+	double distx = targetPt.x - referencePt.x;
+	double disty = targetPt.y - referencePt.y;
+
+	double angle = glm::atan(disty, distx);
+
+	if (angle < 0) {
+		angle += 2 * PI;
+	}
+
+	return angle;
 }
 
 /**
@@ -302,8 +310,13 @@ double directionInRadians(const dvec2& referencePt, const dvec2& targetPt) {
 */
 
 double directionInRadians(const dvec2& targetPt) {
-	/* CSE 386 - todo  */
-	return 0;
+	double angle = glm::atan(targetPt.y, targetPt.x);
+
+	if (angle < 0) {
+		angle += 2 * PI;
+	}
+
+	return angle;
 }
 
 /**
@@ -321,8 +334,16 @@ double directionInRadians(const dvec2& targetPt) {
 */
 
 double directionInRadians(double x1, double y1, double x2,  double y2) {
-	/* CSE 386 - todo  */
-	return 0.0;
+	double distx = x2 - x1;
+	double disty = y2 - y1;
+
+	double angle = glm::atan(disty, distx);
+
+	if (angle < 0) {
+		angle += 2 * PI;
+	}
+
+	return angle;
 }
 
 /**
