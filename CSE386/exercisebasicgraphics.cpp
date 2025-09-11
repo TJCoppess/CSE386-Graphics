@@ -250,6 +250,110 @@ int main(int argc, char* argv[]) {
 	cout << directionInRadians(0, 0, 0, -1) << "          Expected: 4.71239" << endl;
 	cout << directionInRadians(5, 5, 4, 4) << "          Expected: 3.92699" << endl;
 
+	// Map
+	cout << "Map Test Cases" << endl;
+	cout << map(2, 0, 5, 10, 11) << " " << 10.4 << endl;
+
+	// Basic mapping
+	cout << map(0, 0, 1, 0, 10) << " " << 0 << endl;            // start to start
+	cout << map(1, 0, 1, 0, 10) << " " << 10 << endl;           // end to end
+	cout << map(0.5, 0, 1, 0, 10) << " " << 5 << endl;          // midpoint
+
+	// Negative and mixed ranges
+	cout << map(-5, -10, 0, 0, 100) << " " << 50 << endl;       // mid of negative range
+	cout << map(5, -5, 5, -100, 100) << " " << 100 << endl;     // end maps to end
+	cout << map(-5, -5, 5, -100, 100) << " " << -100 << endl;   // start maps to start
+	cout << map(0, -5, 5, -100, 100) << " " << 0 << endl;       // center maps to center
+
+	// Reversed target range (inversion)
+	cout << map(0, 0, 10, 10, 0) << " " << 10 << endl;          // start maps to high
+	cout << map(10, 0, 10, 10, 0) << " " << 0 << endl;          // end maps to low
+	cout << map(2.5, 0, 10, 10, 0) << " " << 7.5 << endl;       // linear inversion
+
+	// Reversed source range (allowed mathematically, decreasing domain)
+	cout << map(0, 10, 0, 0, 10) << " " << 5 << endl;           // mid between reversed domain
+	cout << map(10, 10, 0, 0, 10) << " " << 0 << endl;          // start (10) maps to low
+	cout << map(0, 10, 0, 0, 10) << " " << 10 << endl;          // end (0) maps to high
+
+	// Out-of-range extrapolation
+	cout << map(15, 0, 10, 0, 100) << " " << 150 << endl;       // above high
+	cout << map(-5, 0, 10, 0, 100) << " " << -50 << endl;       // below low
+
+	// Degenerate intervals (fromLo == fromHi) — note: your function will divide by zero
+	// These are included to highlight undefined behavior; if you later guard, you can validate behavior.
+	// cout << map(1, 5, 5, 0, 10) << " " << /* undefined */ 0 << endl;
+
+	// Large values
+	cout << map(1e9, 0, 1e9, 0, 1) << " " << 1 << endl;
+	cout << map(5e8, 0, 1e9, -1, 1) << " " << 0 << endl;
+
+	// Quadratic (A, B, C) returning vector
+	cout << "Quadratic (A, B, C)" << endl;
+	cout << quadratic(1, 4, 3) << " " << "[-3, -1]" << endl;
+	cout << quadratic(1, 0, 0) << " " << "[0]" << endl;
+	cout << quadratic(-4, -2, -1) << " " << "[]" << endl;
+
+	// Two distinct real roots, ordering ascending
+	cout << quadratic(1, -3, 2) << " " << "[1, 2]" << endl;         // roots 1 and 2
+	cout << quadratic(2, -5, -3) << " " << "[-0.5, 3]" << endl;     // check sort
+
+	// One real root (double root)
+	cout << quadratic(1, 2, 1) << " " << "[-1]" << endl;            // (x+1)^2
+
+	// No real roots (positive discriminant check)
+	cout << quadratic(1, 0, 1) << " " << "[]" << endl;              // x^2 + 1
+
+	// Edge cases with zeros
+	cout << quadratic(0, 2, -4) << " " << "[2]" << endl;            // 2x - 4 = 0 -> x=2 (Note: your implementation assumes quadratic; A=0 becomes linear, discrim calc still works: B^2 - 4AC = 4 - 0 => 2 roots formula divides by 0 if discrim>0. Your current code will divide by 0 if A==0 and discrim>=0.)
+	cout << quadratic(0, 0, 5) << " " << "[]" << endl;              // 5 = 0 -> no roots (but your code divides by 0; included to flag behavior)
+
+	// Negative A with two real roots
+	cout << quadratic(-1, 0, 1) << " " << "[-1, 1]" << endl;
+
+	// Large coefficients
+	cout << quadratic(1e6, -3e6, 2e6) << " " << "[1, 2]" << endl;
+
+	// Quadratic (A, B, C, Roots)
+	cout << "Quadratic (A, B, C, Roots)" << endl;
+	double ary[2];
+
+	cout << quadratic(1, 4, 3, ary) << " " << 2 << " " << "and fills in ary with : [-3, -1]" << endl;
+	cout << quadratic(1, 0, 0, ary) << " " << 1 << " " << "and fills in ary with : [0]     " << endl;
+	cout << quadratic(-4, -2, -1, ary) << " " << 0 << " " << "and does not modify ary.        " << endl;
+
+	// Distinct roots and ordering
+	int n;
+	n = quadratic(1, -3, 2, ary);
+	cout << n << " " << 2 << " " << "and fills in ary with : [1, 2]" << endl;
+
+	n = quadratic(2, -5, -3, ary);
+	cout << n << " " << 2 << " " << "and fills in ary with : [-0.5, 3]" << endl;
+
+	// Double root
+	n = quadratic(1, 2, 1, ary);
+	cout << n << " " << 1 << " " << "and fills in ary with : [-1]" << endl;
+
+	// No real roots
+	n = quadratic(1, 0, 1, ary);
+	cout << n << " " << 0 << " " << "and does not modify ary.        " << endl;
+
+	// A == 0 edge cases (linear or invalid) — your implementation will divide by zero when A==0 and discrim>=0.
+	// These are included to highlight current behavior; you may add guards to return 0 or handle linear case.
+	// n = quadratic(0, 2, -4, ary); // expected 1 root x=2 if handled as linear
+	// n = quadratic(0, 0, 5, ary);  // expected 0 roots (inconsistent equation) if handled
+
+	// Large coefficients
+	n = quadratic(1e6, -3e6, 2e6, ary);
+	cout << n << " " << 2 << " " << "and fills in ary with : [1, 2]" << endl;
+
+	// Symmetric coefficients
+	n = quadratic(-1, 0, 1, ary);
+	cout << n << " " << 2 << " " << "and fills in ary with : [-1, 1]" << endl;
+
+	// Not printing these as expected numeric matches, but calling to ensure function behavior under extremes
+	// Map with infinities (behavior undefined but included as robustness probes)
+	// cout << map(1, 0, 1, -INF, INF) << " " << /* undefined */ 0 << endl;
+
 	return 0;
 
 	frameBuffer.setClearColor(paleGreen);

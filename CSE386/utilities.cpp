@@ -252,7 +252,6 @@ double areaOfTriangle(double x1, double y1, double x2, double y2, double x3, dou
  */
 
 void pointOnUnitCircle(double angleRads, double& x, double& y) {
-	/* CSE 386 - todo  */
 	x = glm::cos(angleRads);
 	y = glm::sin(angleRads);
 }
@@ -358,8 +357,7 @@ double directionInRadians(double x1, double y1, double x2,  double y2) {
  */
 
 double map(double x, double fromLo, double fromHi, double toLow, double toHigh) {
-	/* CSE 386 - todo  */
-	return 0;
+	return ((x - fromLo) / (fromHi - fromLo)) * (toHigh - toLow) + toLow;
 }
 
 /**
@@ -379,10 +377,37 @@ double map(double x, double fromLo, double fromHi, double toLow, double toHigh) 
  */
 
 vector<double> quadratic(double A, double B, double C) {
-	/* CSE 386 - todo  */
 	vector<double> result;	// put only the roots in here
-	result.push_back(0);
-	result.push_back(1);
+
+	if (A == 0.0) {
+		if (B == 0.0) {
+			return result;
+		}
+		else {
+			result.push_back(-C / B);
+			return result;
+		}
+	}
+
+	double discrim = (B * B) - 4 * A * C;
+
+	if (discrim > 0) {
+		double root1 = (-B + sqrt(discrim)) / (2 * A);
+		double root2 = (-B - sqrt(discrim)) / (2 * A);
+
+		if (root1 < root2) {
+			result.push_back(root1);
+			result.push_back(root2);
+		}
+		else {
+			result.push_back(root2);
+			result.push_back(root1);
+		}
+	}
+	else if (discrim == 0) {
+		result.push_back(-B / (2 * A));
+	}
+
 	return result;
 }
 
@@ -419,10 +444,39 @@ vector<double> quadratic(double A, double B, double C) {
 */
 
 int quadratic(double A, double B, double C, double roots[2]) {
-	/* CSE 386 - todo  */
-	int rootCnt = 0;
-	roots[0] = 1;
-	roots[1] = 2;
+
+	if (A == 0.0) {
+		if (B == 0.0) {
+			return 0;
+		}
+		else {
+			roots[0] = -C / B;
+			return 1;
+		}
+	}
+
+	double discrim = (B * B) - 4 * A * C;
+
+	if (discrim < 0) {
+		return 0;
+	}
+	if (discrim == 0) {
+		roots[0] = -B / (2 * A);
+		return 1;
+	}
+
+	double root1 = (-B + sqrt(discrim)) / (2 * A);
+	double root2 = (-B - sqrt(discrim)) / (2 * A);
+
+	if (root1 < root2) {
+		roots[0] = root1;
+		roots[1] = root2;
+	}
+	else {
+		roots[0] = root2;
+		roots[1] = root1;
+	}
+
 	return 2;
 }
 
