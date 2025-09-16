@@ -488,8 +488,7 @@ int quadratic(double A, double B, double C, double roots[2]) {
 */
 
 dvec2 doubleIt(const dvec2& V) {
-	/* CSE 386 - todo  */
-	return dvec2(0, 0);
+	return 2.0*V;
 }
 
 /**
@@ -502,8 +501,8 @@ dvec2 doubleIt(const dvec2& V) {
 */
 
 dvec3 myNormalize(const dvec3& V) {
-	/* CSE 386 - todo  */
-	return V;
+	double magnitude = sqrt(glm::pow(V.x, 2.0) + glm::pow(V.y, 2.0) + glm::pow(V.z, 2.0));
+	return dvec3(V.x/magnitude, V.y/magnitude, V.z/magnitude);
 }
 
 /**
@@ -517,8 +516,7 @@ two vectors is approximatelyZero().
 */
 
 bool isOrthogonal(const dvec3& a, const dvec3& b) {
-	/* CSE 386 - todo  */
-	return false;
+	return approximatelyZero(glm::dot(a, b));
 }
 
 /**
@@ -531,7 +529,7 @@ bool isOrthogonal(const dvec3& a, const dvec3& b) {
 */
 
 bool formAcuteAngle(const dvec3& a, const dvec3& b) {
-	return false; 0;
+	return glm::dot(a, b) > 0.0;
 }
 
 /**
@@ -547,8 +545,9 @@ bool formAcuteAngle(const dvec3& a, const dvec3& b) {
  */
 
 double cosBetween(const dvec2& v1, const dvec2& v2) {
-	/* CSE 386 - todo  */
-	return 0;
+	double magnitude1 = glm::length(v1);
+	double magnitude2 = glm::length(v2);
+	return glm::dot(v1, v2) / (magnitude1 * magnitude2);
 }
 
 /**
@@ -560,8 +559,9 @@ double cosBetween(const dvec2& v1, const dvec2& v2) {
  */
 
 double cosBetween(const dvec3& v1, const dvec3& v2) {
-	/* CSE 386 - todo  */
-	return 0;
+	double magnitude1 = glm::length(v1);
+	double magnitude2 = glm::length(v2);
+	return glm::dot(v1, v2) / (magnitude1 * magnitude2);
 }
 
 /**
@@ -573,9 +573,9 @@ double cosBetween(const dvec3& v1, const dvec3& v2) {
  */
 
 double cosBetween(const dvec4& v1, const dvec4& v2) {
-	/* CSE 386 - todo  */
-	double cos = glm::dot(v1, v2) / (glm::length(v1) * glm::length(v2));
-	return 0;
+	double magnitude1 = glm::length(v1);
+	double magnitude2 = glm::length(v2);
+	return glm::dot(v1, v2) / (magnitude1 * magnitude2);
 }
 
 /**
@@ -590,8 +590,8 @@ double cosBetween(const dvec4& v1, const dvec4& v2) {
  */
 
 double areaOfParallelogram(const dvec3& v1, const dvec3& v2) {
-	/* CSE 386 - todo  */
-	return 0;
+	dvec3 crossProduct = glm::cross(v1, v2);
+	return glm::length(crossProduct);
 }
 
 /**
@@ -607,8 +607,10 @@ double areaOfParallelogram(const dvec3& v1, const dvec3& v2) {
  */
 
 double areaOfTriangle(const dvec3& pt1, const dvec3& pt2, const dvec3& pt3) {
-	/* CSE 386 - todo  */
-	return 0;
+	dvec3 v1 = pt2 - pt1;
+	dvec3 v2 = pt3 - pt1;
+
+	return areaOfParallelogram(v1, v2) * 0.5;
 }
 
 /**
@@ -620,8 +622,8 @@ double areaOfTriangle(const dvec3& pt1, const dvec3& pt2, const dvec3& pt3) {
 */
 
 dvec3 pointingVector(const dvec3& pt1, const dvec3& pt2) {
-	/* CSE 386 - todo  */
-	return dvec3(0, 0, 0);
+	dvec3 direction = pt2 - pt1;
+	return glm::normalize(direction);
 }
 
 /**

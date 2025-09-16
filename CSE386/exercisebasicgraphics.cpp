@@ -354,6 +354,131 @@ int main(int argc, char* argv[]) {
 	// Map with infinities (behavior undefined but included as robustness probes)
 	// cout << map(1, 0, 1, -INF, INF) << " " << /* undefined */ 0 << endl;
 
+
+	// doubleIt Test Cases
+	cout << "doubleIt Test Cases" << endl;
+	cout << "doubleIt(dvec2(1.0, 2.0)): " << doubleIt(dvec2(1.0, 2.0)).x << ", " << doubleIt(dvec2(1.0, 2.0)).y << "          Expected: 2.0, 4.0" << endl;
+	cout << "doubleIt(dvec2(0.0, 0.0)): " << doubleIt(dvec2(0.0, 0.0)).x << ", " << doubleIt(dvec2(0.0, 0.0)).y << "          Expected: 0.0, 0.0" << endl;
+	cout << "doubleIt(dvec2(-3.5, 7.2)): " << doubleIt(dvec2(-3.5, 7.2)).x << ", " << doubleIt(dvec2(-3.5, 7.2)).y << "          Expected: -7.0, 14.4" << endl;
+	cout << "doubleIt(dvec2(1e-10, -1e10)): " << doubleIt(dvec2(1e-10, -1e10)).x << ", " << doubleIt(dvec2(1e-10, -1e10)).y << "          Expected: 2e-10, -2e10" << endl;
+	cout << "doubleIt(dvec2(0.333333, -0.666666)): " << doubleIt(dvec2(0.333333, -0.666666)).x << ", " << doubleIt(dvec2(0.333333, -0.666666)).y << "          Expected: 0.666666, -1.333332" << endl;
+
+	// myNormalize Test Cases
+	cout << "myNormalize Test Cases" << endl;
+	dvec3 norm1 = myNormalize(dvec3(3.0, 4.0, 0.0));
+	cout << "myNormalize(dvec3(3.0, 4.0, 0.0)): " << norm1.x << ", " << norm1.y << ", " << norm1.z << "          Expected: 0.6, 0.8, 0.0" << endl;
+
+	dvec3 norm2 = myNormalize(dvec3(1.0, 0.0, 0.0));
+	cout << "myNormalize(dvec3(1.0, 0.0, 0.0)): " << norm2.x << ", " << norm2.y << ", " << norm2.z << "          Expected: 1.0, 0.0, 0.0" << endl;
+
+	dvec3 norm3 = myNormalize(dvec3(1.0, 1.0, 1.0));
+	cout << "myNormalize(dvec3(1.0, 1.0, 1.0)): " << norm3.x << ", " << norm3.y << ", " << norm3.z << "          Expected: 0.577350, 0.577350, 0.577350" << endl;
+
+	dvec3 norm4 = myNormalize(dvec3(-2.0, -2.0, -1.0));
+	cout << "myNormalize(dvec3(-2.0, -2.0, -1.0)): " << norm4.x << ", " << norm4.y << ", " << norm4.z << "          Expected: -0.666667, -0.666667, -0.333333" << endl;
+
+	dvec3 norm5 = myNormalize(dvec3(1e-10, 1e-10, 1e-10));
+	cout << "myNormalize(dvec3(1e-10, 1e-10, 1e-10)): " << norm5.x << ", " << norm5.y << ", " << norm5.z << "          Expected: 0.577350, 0.577350, 0.577350" << endl;
+
+	dvec3 norm6 = myNormalize(dvec3(1e10, 0.0, 0.0));
+	cout << "myNormalize(dvec3(1e10, 0.0, 0.0)): " << norm6.x << ", " << norm6.y << ", " << norm6.z << "          Expected: 1.0, 0.0, 0.0" << endl;
+
+	// isOrthogonal Test Cases
+	cout << "isOrthogonal Test Cases" << endl;
+	cout << "isOrthogonal(dvec3(1.0, 0.0, 0.0), dvec3(0.0, 1.0, 0.0)): " << isOrthogonal(dvec3(1.0, 0.0, 0.0), dvec3(0.0, 1.0, 0.0)) << "          Expected: 1 (true)" << endl;
+	cout << "isOrthogonal(dvec3(1.0, 1.0, 0.0), dvec3(1.0, -1.0, 0.0)): " << isOrthogonal(dvec3(1.0, 1.0, 0.0), dvec3(1.0, -1.0, 0.0)) << "          Expected: 1 (true)" << endl;
+	cout << "isOrthogonal(dvec3(1.0, 0.0, 0.0), dvec3(1.0, 0.0, 0.0)): " << isOrthogonal(dvec3(1.0, 0.0, 0.0), dvec3(1.0, 0.0, 0.0)) << "          Expected: 0 (false)" << endl;
+	cout << "isOrthogonal(dvec3(1.0, 2.0, 3.0), dvec3(2.0, -1.0, 0.0)): " << isOrthogonal(dvec3(1.0, 2.0, 3.0), dvec3(2.0, -1.0, 0.0)) << "          Expected: 1 (true)" << endl;
+	cout << "isOrthogonal(dvec3(3.0, 4.0, 0.0), dvec3(4.0, -3.0, 0.0)): " << isOrthogonal(dvec3(3.0, 4.0, 0.0), dvec3(4.0, -3.0, 0.0)) << "          Expected: 1 (true)" << endl;
+	cout << "isOrthogonal(dvec3(1.0, 1.0, 1.0), dvec3(1.0, 1.0, 1.0)): " << isOrthogonal(dvec3(1.0, 1.0, 1.0), dvec3(1.0, 1.0, 1.0)) << "          Expected: 0 (false)" << endl;
+	cout << "isOrthogonal(dvec3(-1.0, 0.0, 0.0), dvec3(0.0, -1.0, 0.0)): " << isOrthogonal(dvec3(-1.0, 0.0, 0.0), dvec3(0.0, -1.0, 0.0)) << "          Expected: 1 (true)" << endl;
+	cout << "isOrthogonal(dvec3(1e-10, 1.0, 0.0), dvec3(1.0, -1e-10, 0.0)): " << isOrthogonal(dvec3(1e-10, 1.0, 0.0), dvec3(1.0, -1e-10, 0.0)) << "          Expected: 1 (true)" << endl;
+
+	// formAcuteAngle Test Cases
+	cout << "formAcuteAngle Test Cases" << endl;
+	cout << "formAcuteAngle(dvec3(1.0, 0.0, 0.0), dvec3(1.0, 0.0, 0.0)): " << formAcuteAngle(dvec3(1.0, 0.0, 0.0), dvec3(1.0, 0.0, 0.0)) << "          Expected: 1 (true)" << endl;
+	cout << "formAcuteAngle(dvec3(1.0, 0.0, 0.0), dvec3(0.0, 1.0, 0.0)): " << formAcuteAngle(dvec3(1.0, 0.0, 0.0), dvec3(0.0, 1.0, 0.0)) << "          Expected: 0 (false)" << endl;
+	cout << "formAcuteAngle(dvec3(1.0, 0.0, 0.0), dvec3(-1.0, 0.0, 0.0)): " << formAcuteAngle(dvec3(1.0, 0.0, 0.0), dvec3(-1.0, 0.0, 0.0)) << "          Expected: 0 (false)" << endl;
+	cout << "formAcuteAngle(dvec3(1.0, 1.0, 0.0), dvec3(1.0, 0.0, 0.0)): " << formAcuteAngle(dvec3(1.0, 1.0, 0.0), dvec3(1.0, 0.0, 0.0)) << "          Expected: 1 (true)" << endl;
+	cout << "formAcuteAngle(dvec3(1.0, 1.0, 1.0), dvec3(-1.0, -1.0, -1.0)): " << formAcuteAngle(dvec3(1.0, 1.0, 1.0), dvec3(-1.0, -1.0, -1.0)) << "          Expected: 0 (false)" << endl;
+	cout << "formAcuteAngle(dvec3(2.0, 3.0, 1.0), dvec3(1.0, 1.0, 1.0)): " << formAcuteAngle(dvec3(2.0, 3.0, 1.0), dvec3(1.0, 1.0, 1.0)) << "          Expected: 1 (true)" << endl;
+	cout << "formAcuteAngle(dvec3(-1.0, 2.0, 0.0), dvec3(1.0, 1.0, 0.0)): " << formAcuteAngle(dvec3(-1.0, 2.0, 0.0), dvec3(1.0, 1.0, 0.0)) << "          Expected: 1 (true)" << endl;
+	cout << "formAcuteAngle(dvec3(1.0, -1.0, 0.0), dvec3(-1.0, 1.0, 0.0)): " << formAcuteAngle(dvec3(1.0, -1.0, 0.0), dvec3(-1.0, 1.0, 0.0)) << "          Expected: 0 (false)" << endl;
+
+	// cosBetween (dvec2) Test Cases
+	cout << "cosBetween (dvec2) Test Cases" << endl;
+	cout << "cosBetween(dvec2(1.0, 0.0), dvec2(1.0, 0.0)): " << cosBetween(dvec2(1.0, 0.0), dvec2(1.0, 0.0)) << "          Expected: 1.0" << endl;
+	cout << "cosBetween(dvec2(1.0, 0.0), dvec2(1.0, 1.0)): " << cosBetween(dvec2(1.0, 0.0), dvec2(1.0, 1.0)) << "          Expected: 0.707107" << endl;
+	cout << "cosBetween(dvec2(-1.0, sqrt(3.0)), dvec2(-1.0, 0.0)): " << cosBetween(dvec2(-1.0, sqrt(3.0)), dvec2(-1.0, 0.0)) << "          Expected: 0.5" << endl;
+	cout << "cosBetween(dvec2(-1.0, sqrt(3.0)), dvec2(1.0, sqrt(3.0))): " << cosBetween(dvec2(-1.0, sqrt(3.0)), dvec2(1.0, sqrt(3.0))) << "          Expected: 0.5" << endl;
+	cout << "cosBetween(dvec2(1.0, 0.0), dvec2(-1.0, 0.0)): " << cosBetween(dvec2(1.0, 0.0), dvec2(-1.0, 0.0)) << "          Expected: -1.0" << endl;
+	cout << "cosBetween(dvec2(0.0, 1.0), dvec2(1.0, 0.0)): " << cosBetween(dvec2(0.0, 1.0), dvec2(1.0, 0.0)) << "          Expected: 0.0" << endl;
+	cout << "cosBetween(dvec2(3.0, 4.0), dvec2(4.0, 3.0)): " << cosBetween(dvec2(3.0, 4.0), dvec2(4.0, 3.0)) << "          Expected: 0.96" << endl;
+	cout << "cosBetween(dvec2(-2.0, -2.0), dvec2(1.0, 1.0)): " << cosBetween(dvec2(-2.0, -2.0), dvec2(1.0, 1.0)) << "          Expected: -1.0" << endl;
+
+	// cosBetween (dvec3) Test Cases
+	cout << "cosBetween (dvec3) Test Cases" << endl;
+	cout << "cosBetween(dvec3(1.0, 0.0, 0.0), dvec3(1.0, 0.0, 0.0)): " << cosBetween(dvec3(1.0, 0.0, 0.0), dvec3(1.0, 0.0, 0.0)) << "          Expected: 1.0" << endl;
+	cout << "cosBetween(dvec3(1.0, 0.0, 0.0), dvec3(0.0, 1.0, 0.0)): " << cosBetween(dvec3(1.0, 0.0, 0.0), dvec3(0.0, 1.0, 0.0)) << "          Expected: 0.0" << endl;
+	cout << "cosBetween(dvec3(1.0, 0.0, 0.0), dvec3(-1.0, 0.0, 0.0)): " << cosBetween(dvec3(1.0, 0.0, 0.0), dvec3(-1.0, 0.0, 0.0)) << "          Expected: -1.0" << endl;
+	cout << "cosBetween(dvec3(1.0, 1.0, 1.0), dvec3(1.0, 1.0, 1.0)): " << cosBetween(dvec3(1.0, 1.0, 1.0), dvec3(1.0, 1.0, 1.0)) << "          Expected: 1.0" << endl;
+	cout << "cosBetween(dvec3(1.0, 1.0, 0.0), dvec3(1.0, 0.0, 1.0)): " << cosBetween(dvec3(1.0, 1.0, 0.0), dvec3(1.0, 0.0, 1.0)) << "          Expected: 0.5" << endl;
+	cout << "cosBetween(dvec3(2.0, 3.0, 6.0), dvec3(1.0, 2.0, 3.0)): " << cosBetween(dvec3(2.0, 3.0, 6.0), dvec3(1.0, 2.0, 3.0)) << "          Expected: 0.992685" << endl;
+	cout << "cosBetween(dvec3(-1.0, -1.0, -1.0), dvec3(1.0, 1.0, 1.0)): " << cosBetween(dvec3(-1.0, -1.0, -1.0), dvec3(1.0, 1.0, 1.0)) << "          Expected: -1.0" << endl;
+
+	// cosBetween (dvec4) Test Cases
+	cout << "cosBetween (dvec4) Test Cases" << endl;
+	cout << "cosBetween(dvec4(1.0, 0.0, 0.0, 0.0), dvec4(1.0, 0.0, 0.0, 0.0)): " << cosBetween(dvec4(1.0, 0.0, 0.0, 0.0), dvec4(1.0, 0.0, 0.0, 0.0)) << "          Expected: 1.0" << endl;
+	cout << "cosBetween(dvec4(1.0, 0.0, 0.0, 0.0), dvec4(0.0, 1.0, 0.0, 0.0)): " << cosBetween(dvec4(1.0, 0.0, 0.0, 0.0), dvec4(0.0, 1.0, 0.0, 0.0)) << "          Expected: 0.0" << endl;
+	cout << "cosBetween(dvec4(1.0, 1.0, 1.0, 1.0), dvec4(1.0, 1.0, 1.0, 1.0)): " << cosBetween(dvec4(1.0, 1.0, 1.0, 1.0), dvec4(1.0, 1.0, 1.0, 1.0)) << "          Expected: 1.0" << endl;
+	cout << "cosBetween(dvec4(1.0, 0.0, 0.0, 0.0), dvec4(-1.0, 0.0, 0.0, 0.0)): " << cosBetween(dvec4(1.0, 0.0, 0.0, 0.0), dvec4(-1.0, 0.0, 0.0, 0.0)) << "          Expected: -1.0" << endl;
+	cout << "cosBetween(dvec4(1.0, 1.0, 0.0, 0.0), dvec4(1.0, 0.0, 1.0, 0.0)): " << cosBetween(dvec4(1.0, 1.0, 0.0, 0.0), dvec4(1.0, 0.0, 1.0, 0.0)) << "          Expected: 0.5" << endl;
+	cout << "cosBetween(dvec4(2.0, 3.0, 1.0, 4.0), dvec4(1.0, 1.0, 1.0, 1.0)): " << cosBetween(dvec4(2.0, 3.0, 1.0, 4.0), dvec4(1.0, 1.0, 1.0, 1.0)) << "          Expected: 0.912871" << endl;
+	cout << "cosBetween(dvec4(-1.0, -2.0, -3.0, -4.0), dvec4(1.0, 2.0, 3.0, 4.0)): " << cosBetween(dvec4(-1.0, -2.0, -3.0, -4.0), dvec4(1.0, 2.0, 3.0, 4.0)) << "          Expected: -1.0" << endl;
+
+	// areaOfParallelogram Test Cases
+	cout << "areaOfParallelogram Test Cases" << endl;
+	cout << "areaOfParallelogram(dvec3(1.0, 0.0, 0.0), dvec3(0.0, 1.0, 0.0)): " << areaOfParallelogram(dvec3(1.0, 0.0, 0.0), dvec3(0.0, 1.0, 0.0)) << "          Expected: 1.0" << endl;
+	cout << "areaOfParallelogram(dvec3(1.0, 1.0, 1.0), dvec3(1.0, 0.0, 1.0)): " << areaOfParallelogram(dvec3(1.0, 1.0, 1.0), dvec3(1.0, 0.0, 1.0)) << "          Expected: 1.41421" << endl;
+	cout << "areaOfParallelogram(dvec3(2.0, 0.0, 0.0), dvec3(0.0, 3.0, 0.0)): " << areaOfParallelogram(dvec3(2.0, 0.0, 0.0), dvec3(0.0, 3.0, 0.0)) << "          Expected: 6.0" << endl;
+	cout << "areaOfParallelogram(dvec3(1.0, 0.0, 0.0), dvec3(1.0, 0.0, 0.0)): " << areaOfParallelogram(dvec3(1.0, 0.0, 0.0), dvec3(1.0, 0.0, 0.0)) << "          Expected: 0.0" << endl;
+	cout << "areaOfParallelogram(dvec3(3.0, 4.0, 0.0), dvec3(0.0, 0.0, 5.0)): " << areaOfParallelogram(dvec3(3.0, 4.0, 0.0), dvec3(0.0, 0.0, 5.0)) << "          Expected: 25.0" << endl;
+	cout << "areaOfParallelogram(dvec3(-1.0, 2.0, 0.0), dvec3(3.0, 1.0, 0.0)): " << areaOfParallelogram(dvec3(-1.0, 2.0, 0.0), dvec3(3.0, 1.0, 0.0)) << "          Expected: 7.0" << endl;
+	cout << "areaOfParallelogram(dvec3(1.0, 2.0, 3.0), dvec3(4.0, 5.0, 6.0)): " << areaOfParallelogram(dvec3(1.0, 2.0, 3.0), dvec3(4.0, 5.0, 6.0)) << "          Expected: 7.34847" << endl;
+
+	// areaOfTriangle Test Cases
+	cout << "areaOfTriangle Test Cases" << endl;
+	cout << "areaOfTriangle(dvec3(0.0, 0.0, 0.0), dvec3(1.0, 0.0, 0.0), dvec3(0.0, 1.0, 0.0)): " << areaOfTriangle(dvec3(0.0, 0.0, 0.0), dvec3(1.0, 0.0, 0.0), dvec3(0.0, 1.0, 0.0)) << "          Expected: 0.5" << endl;
+	cout << "areaOfTriangle(dvec3(-10.0, -10.0, -10.0), dvec3(-11.0, -10.0, -10.0), dvec3(-10.0, -11.0, -10.0)): " << areaOfTriangle(dvec3(-10.0, -10.0, -10.0), dvec3(-11.0, -10.0, -10.0), dvec3(-10.0, -11.0, -10.0)) << "          Expected: 0.5" << endl;
+	cout << "areaOfTriangle(dvec3(0.0, 0.0, 0.0), dvec3(2.0, 0.0, 0.0), dvec3(0.0, 3.0, 0.0)): " << areaOfTriangle(dvec3(0.0, 0.0, 0.0), dvec3(2.0, 0.0, 0.0), dvec3(0.0, 3.0, 0.0)) << "          Expected: 3.0" << endl;
+	cout << "areaOfTriangle(dvec3(0.0, 0.0, 0.0), dvec3(0.0, 0.0, 0.0), dvec3(1.0, 1.0, 0.0)): " << areaOfTriangle(dvec3(0.0, 0.0, 0.0), dvec3(0.0, 0.0, 0.0), dvec3(1.0, 1.0, 0.0)) << "          Expected: 0.0" << endl;
+	cout << "areaOfTriangle(dvec3(1.0, 1.0, 1.0), dvec3(2.0, 1.0, 1.0), dvec3(1.0, 2.0, 1.0)): " << areaOfTriangle(dvec3(1.0, 1.0, 1.0), dvec3(2.0, 1.0, 1.0), dvec3(1.0, 2.0, 1.0)) << "          Expected: 0.5" << endl;
+	cout << "areaOfTriangle(dvec3(0.0, 0.0, 0.0), dvec3(3.0, 4.0, 0.0), dvec3(0.0, 0.0, 5.0)): " << areaOfTriangle(dvec3(0.0, 0.0, 0.0), dvec3(3.0, 4.0, 0.0), dvec3(0.0, 0.0, 5.0)) << "          Expected: 12.5" << endl;
+	cout << "areaOfTriangle(dvec3(1.0, 2.0, 3.0), dvec3(4.0, 5.0, 6.0), dvec3(7.0, 8.0, 9.0)): " << areaOfTriangle(dvec3(1.0, 2.0, 3.0), dvec3(4.0, 5.0, 6.0), dvec3(7.0, 8.0, 9.0)) << "          Expected: 0.0" << endl;
+
+	// pointingVector Test Cases
+	cout << "pointingVector Test Cases" << endl;
+	dvec3 pv1 = pointingVector(dvec3(0.0, 0.0, 0.0), dvec3(1.0, 0.0, 0.0));
+	cout << "pointingVector(dvec3(0.0, 0.0, 0.0), dvec3(1.0, 0.0, 0.0)): " << pv1.x << ", " << pv1.y << ", " << pv1.z << "          Expected: 1.0, 0.0, 0.0" << endl;
+
+	dvec3 pv2 = pointingVector(dvec3(1.0, 1.0, 1.0), dvec3(2.0, 2.0, 2.0));
+	cout << "pointingVector(dvec3(1.0, 1.0, 1.0), dvec3(2.0, 2.0, 2.0)): " << pv2.x << ", " << pv2.y << ", " << pv2.z << "          Expected: 0.577350, 0.577350, 0.577350" << endl;
+
+	dvec3 pv3 = pointingVector(dvec3(0.0, 0.0, 0.0), dvec3(3.0, 4.0, 0.0));
+	cout << "pointingVector(dvec3(0.0, 0.0, 0.0), dvec3(3.0, 4.0, 0.0)): " << pv3.x << ", " << pv3.y << ", " << pv3.z << "          Expected: 0.6, 0.8, 0.0" << endl;
+
+	dvec3 pv4 = pointingVector(dvec3(5.0, 3.0, 1.0), dvec3(2.0, 7.0, 1.0));
+	cout << "pointingVector(dvec3(5.0, 3.0, 1.0), dvec3(2.0, 7.0, 1.0)): " << pv4.x << ", " << pv4.y << ", " << pv4.z << "          Expected: -0.6, 0.8, 0.0" << endl;
+
+	dvec3 pv5 = pointingVector(dvec3(-1.0, -1.0, -1.0), dvec3(1.0, 1.0, 1.0));
+	cout << "pointingVector(dvec3(-1.0, -1.0, -1.0), dvec3(1.0, 1.0, 1.0)): " << pv5.x << ", " << pv5.y << ", " << pv5.z << "          Expected: 0.577350, 0.577350, 0.577350" << endl;
+
+	dvec3 pv6 = pointingVector(dvec3(10.0, 20.0, 30.0), dvec3(10.0, 20.0, 31.0));
+	cout << "pointingVector(dvec3(10.0, 20.0, 30.0), dvec3(10.0, 20.0, 31.0)): " << pv6.x << ", " << pv6.y << ", " << pv6.z << "          Expected: 0.0, 0.0, 1.0" << endl;
+
+	dvec3 pv7 = pointingVector(dvec3(0.0, 0.0, 0.0), dvec3(-5.0, 0.0, 0.0));
+	cout << "pointingVector(dvec3(0.0, 0.0, 0.0), dvec3(-5.0, 0.0, 0.0)): " << pv7.x << ", " << pv7.y << ", " << pv7.z << "          Expected: -1.0, 0.0, 0.0" << endl;
+
 	return 0;
 
 	frameBuffer.setClearColor(paleGreen);
