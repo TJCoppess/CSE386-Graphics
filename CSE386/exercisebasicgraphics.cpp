@@ -174,7 +174,7 @@ int main(int argc, char* argv[]) {
 	cout << "Area Of 6 Vertex Triangle Test Cases" << endl;
 	cout << areaOfTriangle(0, 0, 3, 0, 0, 4) << "          Expected: 6.0" << endl;
 	cout << areaOfTriangle(0, 0, 1, 0, 0, 1) << "          Expected: 0.5" << endl;
-	cout << areaOfTriangle(1, 1, 2, 2, 3, 3) << "          Expected: 0.0" << endl;
+	cout << areaOfTriangle(1, 1, 2, 2, 3, 3) << "          Expected: -1.0" << endl;
 	cout << areaOfTriangle(-1, -1, 1, -1, 0, 1) << "          Expected: 2.0" << endl;
 	cout << areaOfTriangle(0, 0, 0, 0, 0, 0) << "          Expected: -1.0" << endl;
 	cout << areaOfTriangle(5, 5, 10, 5, 7.5, 9) << "          Expected: 10.0" << endl;

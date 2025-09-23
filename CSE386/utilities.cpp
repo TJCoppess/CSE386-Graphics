@@ -173,7 +173,7 @@ double max(double A, double B, double C) {
 */
 
 double distanceFromOrigin(double x, double y) {
-	return sqrt(glm::pow(x, 2.0) + glm::pow(y , 2.0));
+	return glm::length(dvec2(x, y));
 }
 
 /**
@@ -194,7 +194,7 @@ double distanceFromOrigin(double x, double y) {
 */
 
 double distanceBetween(double x1, double y1, double x2, double y2) {
-	return glm::pow((glm::pow((x1 - x2), 2.0) + glm::pow((y1 - y2), 2.0)), 0.5);
+	return glm::length(dvec2(x1 - x2, y1 - y2));
 }
 
 /**
@@ -216,7 +216,7 @@ double areaOfTriangle(double a, double b, double c) {
 	}
 	else {
 		double s = 0.5 * (a + b + c);
-		return glm::pow((s * (s - a) * (s - b) * (s - c)), 0.5);
+		return sqrt(s * (s - a) * (s - b) * (s - c));
 	}
 }
 
@@ -267,7 +267,7 @@ void pointOnUnitCircle(double angleRads, double& x, double& y) {
 */
 
 dvec2 pointOnCircle(const dvec2& center, double R, double angleRads) {
-	return dvec2(center.x + R * cos(angleRads), center.y + R * sin(angleRads));
+	return dvec2(center.x + R * glm::cos(angleRads), center.y + R * glm::sin(angleRads));
 }
 
 /**
@@ -379,8 +379,8 @@ double map(double x, double fromLo, double fromHi, double toLow, double toHigh) 
 vector<double> quadratic(double A, double B, double C) {
 	vector<double> result;	// put only the roots in here
 
-	if (A == 0.0) {
-		if (B == 0.0) {
+	if (approximatelyZero(A)) {
+		if (approximatelyZero(B)) {
 			return result;
 		}
 		else {
@@ -404,7 +404,7 @@ vector<double> quadratic(double A, double B, double C) {
 			result.push_back(root1);
 		}
 	}
-	else if (discrim == 0) {
+	else if (approximatelyZero(discrim)) {
 		result.push_back(-B / (2 * A));
 	}
 
@@ -445,8 +445,8 @@ vector<double> quadratic(double A, double B, double C) {
 
 int quadratic(double A, double B, double C, double roots[2]) {
 
-	if (A == 0.0) {
-		if (B == 0.0) {
+	if (approximatelyZero(A)) {
+		if (approximatelyZero(B)) {
 			return 0;
 		}
 		else {
@@ -460,7 +460,7 @@ int quadratic(double A, double B, double C, double roots[2]) {
 	if (discrim < 0) {
 		return 0;
 	}
-	if (discrim == 0) {
+	if (approximatelyZero(discrim)) {
 		roots[0] = -B / (2 * A);
 		return 1;
 	}
@@ -501,8 +501,8 @@ dvec2 doubleIt(const dvec2& V) {
 */
 
 dvec3 myNormalize(const dvec3& V) {
-	double magnitude = sqrt(glm::pow(V.x, 2.0) + glm::pow(V.y, 2.0) + glm::pow(V.z, 2.0));
-	return dvec3(V.x/magnitude, V.y/magnitude, V.z/magnitude);
+	double magnitude = glm::length(V);
+	return V / magnitude;
 }
 
 /**
@@ -516,7 +516,7 @@ two vectors is approximatelyZero().
 */
 
 bool isOrthogonal(const dvec3& a, const dvec3& b) {
-	return approximatelyZero(glm::dot(a, b));
+	return approximatelyZero(cosBetween(a, b));
 }
 
 /**
