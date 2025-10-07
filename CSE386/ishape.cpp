@@ -66,11 +66,17 @@ VisibleIShape::VisibleIShape(IShapePtr shapePtr, const Material& mat, Image* ima
  */
 
 void VisibleIShape::findClosestIntersection(const Ray& ray, OpaqueHitRecord& hit) const {
+	
+	shape->findClosestIntersection(ray, hit);
+	if (hit.t != FLT_MAX) {
+		hit.material = material;
+	}
+	
 	/* 386 - todo */
-	hit.t = FLT_MAX;
-	hit.interceptPt = ORIGIN3D;
-	hit.normal = Y_AXIS;
-	hit.material = material;
+	// hit.t = FLT_MAX;
+	// hit.interceptPt = ORIGIN3D;
+	// hit.normal = Y_AXIS;
+	// hit.material = material;
 }
 
 /**
@@ -84,10 +90,19 @@ void VisibleIShape::findClosestIntersection(const Ray& ray, OpaqueHitRecord& hit
 
 void VisibleIShape::findIntersection(const Ray& ray, const vector<VisibleIShapePtr>& surfaces,
 	OpaqueHitRecord& opaqueHitRecord) {
+
+	for (int i = 0; i < surfaces.size(); i++) {
+		OpaqueHitRecord tmpHit;
+		surfaces[i]->findClosestIntersection(ray, tmpHit);
+		if (tmpHit.t != FLT_MAX && tmpHit.t < opaqueHitRecord.t) {
+			opaqueHitRecord = tmpHit;
+		}
+	}
+
 	/* CSE 386 - todo  */
-	opaqueHitRecord.t = FLT_MAX;
-	opaqueHitRecord.interceptPt = ORIGIN3D;
-	opaqueHitRecord.normal = Y_AXIS;
+	// opaqueHitRecord.t = FLT_MAX;
+	// opaqueHitRecord.interceptPt = ORIGIN3D;
+	// opaqueHitRecord.normal = Y_AXIS;
 }
 
 /**

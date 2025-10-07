@@ -51,7 +51,7 @@ const std::string username = "coppestj";
 const double EPSILON = 1.0E-3;		//!< default value used for "SMALL" tolerances.
 
 const int TIME_INTERVAL = 100;		//!< default time interval used timers.
-const int WINDOW_WIDTH = 300;		//!< default window width.
+const int WINDOW_WIDTH = 600;		//!< default window width.
 const int WINDOW_HEIGHT = 300;		//!< default window height.
 const unsigned char ESCAPE = 27;	//!< escape key.
 const int DEFAULT_SLICES = 8;				//!< default value used when slicing up a curved object.
