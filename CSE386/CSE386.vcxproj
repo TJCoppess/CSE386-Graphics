@@ -172,7 +172,7 @@
     <ClCompile Include="colorandmaterials.cpp" />
     <ClCompile Include="defs.cpp" />
     <ClCompile Include="eshape.cpp" />
-    <ClCompile Include="exerciseraytrace.cpp" />
+    <ClCompile Include="exercisecolortests.cpp" />
     <ClCompile Include="fragmentops.cpp" />
     <ClCompile Include="framebuffer.cpp" />
     <ClCompile Include="image.cpp" />

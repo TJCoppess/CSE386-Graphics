@@ -21,7 +21,8 @@
 
 color ambientColor(const color& mat, const color& lightColor) {
 	/* CSE 386 - todo  */
-	return mat;
+	return glm::clamp(mat * lightColor, 0.0, 1.0);
+	// return mat;
 }
 
 /**
@@ -37,7 +38,8 @@ color ambientColor(const color& mat, const color& lightColor) {
 color diffuseColor(const color& mat, const color& lightColor,
 	const dvec3& l, const dvec3& n) {
 	/* CSE 386 - todo  */
-	return mat;
+	return glm::clamp((mat * lightColor * glm::max(0.0, glm::dot(l,n))), 0.0, 1.0);
+	// return mat;
 }
 
 /**
@@ -56,6 +58,9 @@ color specularColor(const color& mat, const color& lightColor,
 	double shininess,
 	const dvec3& r, const dvec3& v) {
 	/* CSE 386 - todo  */
+
+	return glm::clamp(mat * lightColor * glm::max(0.0, glm::pow(glm::clamp(glm::dot(r,v), 0.0, 1.0), shininess)), 0.0, 1.0);
+
 	return mat;
 }
 
@@ -84,7 +89,25 @@ color totalColor(const Material& mat, const color& lightColor,
 	bool attenuationOn,
 	const LightATParams& ATparams) {
 	/* CSE 386 - todo  */
-	return mat.diffuse;
+	dvec3 l = glm::normalize(lightPos - intersectionPt);
+	dvec3 r = 2 * glm::clamp(glm::dot(l, n), 0.0, 1.0) * n - l;
+	double AT = 1.0;
+	color total;
+	// Call the 3 functions above
+	color A = ambientColor(mat.ambient, lightColor);
+	color D = diffuseColor(mat.diffuse, lightColor, l, n);
+	color S = specularColor(mat.specular, lightColor, mat.shininess, r, v);
+	
+	if (attenuationOn) {
+		double distance = glm::distance(lightPos, intersectionPt);
+		AT = 1.0 / (ATparams.constant + ATparams.linear * distance + ATparams.quadratic * glm::pow(distance, 2.0));
+	}
+	total = A + AT * (D + S);
+
+	return glm::clamp(total, 0.0, 1.0);
+
+
+	// return mat.diffuse;
 }
 
 /**
@@ -106,7 +129,31 @@ color PositionalLight::illuminate(const dvec3& interceptWorldCoords,
 	const dvec3& viewerPos,
 	bool inShadow) const {
 	/* CSE 386 - todo  */
-	return material.diffuse;
+
+	if (!this->isOn) {
+		return black;
+	}
+	if (inShadow) {
+		return ambientColor(material.ambient, this->lightColor);
+	}
+	dvec3 l = glm::normalize(this->pos - interceptWorldCoords);
+	dvec3 r = 2 * glm::clamp(glm::dot(l, normal), 0.0, 1.0) * normal - l;
+	dvec3 v = glm::normalize(viewerPos - interceptWorldCoords);
+	double AT = 1.0;
+	color total;
+	color A = ambientColor(material.ambient, this->lightColor);
+	color D = diffuseColor(material.diffuse, this->lightColor, l, normal);
+	color S = specularColor(material.specular, this->lightColor, material.shininess, r, v);
+
+	if (this->attenuationIsTurnedOn) {
+		double distance = glm::distance(this->pos, interceptWorldCoords);
+		AT = 1.0 / (this->atParams.constant + this->atParams.linear * distance + this->atParams.quadratic * glm::pow(distance, 2.0));
+	}
+	total = A + AT * (D + S);
+
+	return glm::clamp(total, 0.0, 1.0);
+
+	// return material.diffuse;
 }
 
 /**
