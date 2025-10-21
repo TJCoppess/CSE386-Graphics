@@ -9,24 +9,24 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
+    <Filter Include="Header Files\Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Doxyfile">
-      <Filter>Resource Files</Filter>
+      <Filter>Header Files\Resource Files</Filter>
     </None>
     <None Include="packages.config" />
     <None Include="usflag.ppm">
-      <Filter>Resource Files</Filter>
+      <Filter>Header Files\Resource Files</Filter>
     </None>
     <None Include="blackbuck.ppm">
-      <Filter>Resource Files</Filter>
+      <Filter>Header Files\Resource Files</Filter>
     </None>
     <None Include="snail.ppm">
-      <Filter>Resource Files</Filter>
+      <Filter>Header Files\Resource Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -72,14 +72,14 @@
     <ClInclude Include="utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vertexdata.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="vertexops.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="framebuffer.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vertexdata.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -131,7 +131,7 @@
     <ClCompile Include="vertextdata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="exercisecolortests.cpp">
+    <ClCompile Include="exerciseraytrace.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

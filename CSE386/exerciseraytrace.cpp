@@ -79,6 +79,6 @@ void buildScene() {
 int main(int argc, char* argv[]) {
 	buildScene();
 	frameBuffer.setClearColor(paleGreen);
-	initGraphics(WINDOW_WIDTH, WINDOW_HEIGHT, __FILE__, render, mouseUtility, keyboardUtility, nullptr);
+	initGraphics(WINDOW_WIDTH, WINDOW_HEIGHT, "coppestj -- exerciseraytrace.cpp", render, mouseUtility, keyboardUtility, nullptr);
 	return 0;
 }
