@@ -51,13 +51,17 @@ void RayTracer::raytraceScene(FrameBuffer& frameBuffer, int depth,
 			if (hit.t != FLT_MAX) {
 				// hit.material = firstVisibleShape.material;
 				// color C = hit.material.diffuse;
+				if (glm::dot(hit.normal, ray.dir) > 0.0) {
+					hit.normal = -hit.normal;
+				}
 				color C;
-				for (const auto& light : lights) {
-					C += theScene.lights[0]->illuminate(hit.interceptPt,
+				for (auto light : lights) {
+					bool isInShadow = light->pointIsInAShadow(hit.interceptPt, hit.normal, objs);
+					C += light->illuminate(hit.interceptPt,
 						hit.normal,
 						hit.material,
 						camera.getFrame().origin,
-						false);
+						isInShadow);
 				}
 				frameBuffer.setColor(x, y, C);
 			}

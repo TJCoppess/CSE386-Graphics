@@ -775,11 +775,21 @@ void ICylinderY::findClosestIntersection(const Ray& ray, HitRecord& hit) const {
 	HitRecord hits[2];
 	int numHits = IQuadricSurface::findIntersections(ray, hits);
 
-	if (numHits == 0) {
+	double topY = center.y + length / 2;
+	double bottomY = center.y - length / 2;
+
+	for (int i = 0; i < numHits; i++) {
+		if (hits[i].interceptPt.y < topY && hits[i].interceptPt.y > bottomY) {
+			hit = hits[i];
+			return;
+		}
+	}
+
+	/*if (numHits == 0) {
 		hit.t = FLT_MAX;
 	} else {
 		hit = hits[0];
-	}
+	}*/
 }
 
 /**
