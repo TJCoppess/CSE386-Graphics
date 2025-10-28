@@ -83,9 +83,9 @@ void buildScene() {
 	// scene.addOpaqueObject(new VisibleIShape(new IPlane(dvec3(0, 0, 0), dvec3(0, 1, 0)), tin));
 	// scene.addOpaqueObject(new VisibleIShape(new IPlane(dvec3(0, 0, 0), dvec3(0, -1, 0)), tin));
 
-	scene.addLight(lights[0]);
-	// scene.addLight(lights[1]);
-	lights[1]->isOn = false;
+	// scene.addLight(lights[0]);
+	scene.addLight(lights[1]);
+	lights[1]->isOn = true;
 }
 void render(GLFWwindow* window) {
 	if (isAnimated) {

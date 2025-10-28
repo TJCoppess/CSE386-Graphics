@@ -226,8 +226,6 @@ color SpotLight::illuminate(const dvec3& interceptWorldCoords,
 	else {
 		return black;
 	}
-
-	return material.diffuse;
 }
 
 /**
@@ -256,13 +254,8 @@ bool SpotLight::isInSpotlightCone(const dvec3& spotPos,
 	double spotFOV,
 	const dvec3& intercept) {
 	/* CSE 386 - todo  */
-
 	dvec3 l = intercept - spotPos;
-	double spotCosine = glm::dot(-l, spotDir);
-	double cutoffangle = glm::cos(glm::length(spotDir) / glm::length(l));
-	if (spotCosine > glm::cos(cutoffangle)) {
-		return true;
-	}
-
-	return false;
+	double spotCosine = glm::dot(glm::normalize(l), glm::normalize(spotDir));
+	double cutoffangle = glm::cos(spotFOV / 2);
+	return spotCosine > cutoffangle;
 }
