@@ -42,7 +42,7 @@ void IShape::getTexCoords(const dvec3& pt, double& u, double& v) const {
 
 dvec3 IShape::movePointOffSurface(const dvec3& pt, const dvec3& n) {
 	/* CSE 386 - todo  */
-	return pt;
+	return pt + n * EPSILON;
 }
 
 /**
@@ -70,6 +70,10 @@ void VisibleIShape::findClosestIntersection(const Ray& ray, OpaqueHitRecord& hit
 	shape->findClosestIntersection(ray, hit);
 	if (hit.t != FLT_MAX) {
 		hit.material = material;
+		hit.texture = texture;
+		if (hit.texture != nullptr) {
+			shape->getTexCoords(hit.interceptPt, hit.u, hit.v);
+		}
 	}
 	
 	/* 386 - todo */
@@ -202,10 +206,12 @@ void IDisk::findClosestIntersection(const Ray& ray, HitRecord& hit) const {
  */
 
 void IDisk::getTexCoords(const dvec3& pt, double& u, double& v) const {
-	// The following works only for disks oriented with a normal vector = <0, 0, 1>
-	u = map(pt.x, center.x - radius, center.x + radius, 0.0, 1.0);
-	v = map(pt.y, center.y - radius, center.y + radius, 0.0, 1.0);
-	v = 1.0 - v;
+	Frame diskFrame = Frame::createOrthoNormalBasis(center, n);
+	dvec3 diskPos = diskFrame.globalCoordToFrameCoords(pt);
+	v = map(diskPos.x, -radius, +radius, 0.0, 1.0);
+	u = map(diskPos.y, -radius, +radius, 0.0, 1.0);
+	//v = 1.0 - v;
+	//u = 1.0 - u;
 }
 
 /**
@@ -773,6 +779,7 @@ ICylinderY::ICylinderY(const dvec3& pos, double rad, double len)
 
 void ICylinderY::findClosestIntersection(const Ray& ray, HitRecord& hit) const {
 	HitRecord hits[2];
+	hit.t = FLT_MAX;
 	int numHits = IQuadricSurface::findIntersections(ray, hits);
 
 	double topY = center.y + length / 2;
@@ -780,8 +787,9 @@ void ICylinderY::findClosestIntersection(const Ray& ray, HitRecord& hit) const {
 
 	for (int i = 0; i < numHits; i++) {
 		if (hits[i].interceptPt.y < topY && hits[i].interceptPt.y > bottomY) {
-			hit = hits[i];
-			return;
+			if (hits[i].t < hit.t) {
+				hit = hits[i];
+			}
 		}
 	}
 
@@ -802,7 +810,21 @@ void ICylinderY::findClosestIntersection(const Ray& ray, HitRecord& hit) const {
 
 void ICylinderY::getTexCoords(const dvec3& pt, double& u, double& v) const {
 	/* CSE 386 - todo  */
-	u = v = 0.0;
+
+	double pointOnCylinder = directionInRadians(center.x, -center.z, pt.x, -pt.z);
+
+	//if (pointOnCylinder > 2 * PI) {
+	//	pointOnCylinder -= PI;
+	//}
+
+	u = map(pointOnCylinder, 0, TWO_PI, 0, 1.0);
+	v = map(pt.y, center.y - length / 2, center.y + length / 2, 0.0, 1.0);
+
+	// space
+
+	v = 1.0 - v;
+	// u = 1.0 - u;
+	// u = v = 0.0;
 }
 
 /**

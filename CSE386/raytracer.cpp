@@ -54,16 +54,25 @@ void RayTracer::raytraceScene(FrameBuffer& frameBuffer, int depth,
 				if (glm::dot(hit.normal, ray.dir) > 0.0) {
 					hit.normal = -hit.normal;
 				}
-				color C;
-				for (auto light : lights) {
-					bool isInShadow = light->pointIsInAShadow(hit.interceptPt, hit.normal, objs);
-					C += light->illuminate(hit.interceptPt,
-						hit.normal,
-						hit.material,
-						camera.getFrame().origin,
-						isInShadow);
+				color C = black;
+				Material mat = hit.material;
+
+				if (hit.texture != nullptr) {
+					color texel = hit.texture->getPixelUV(hit.u, hit.v);
+					frameBuffer.setColor(x, y, texel);
 				}
-				frameBuffer.setColor(x, y, C);
+				else {
+					for (auto light : lights) {
+						dvec3 movedPt = IShape::movePointOffSurface(hit.interceptPt, hit.normal);
+						bool isInShadow = light->pointIsInAShadow(movedPt, hit.normal, objs);
+						C += light->illuminate(hit.interceptPt,
+							hit.normal,
+							mat,
+							camera.getFrame().origin,
+							isInShadow);
+					}
+					frameBuffer.setColor(x, y, C);
+				}
 			}
 			frameBuffer.showAxes(x, y, ray, 0.25);			// Displays R/x, G/y, B/z axes
 		}

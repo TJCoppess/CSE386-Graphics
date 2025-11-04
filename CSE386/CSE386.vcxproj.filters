@@ -131,7 +131,7 @@
     <ClCompile Include="vertextdata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="exercisespotlightcone.cpp">
+    <ClCompile Include="exercisematrixoperationsGLM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
