@@ -148,5 +148,3 @@ multiplyMatricesAndVertices:
 		[ -430 -220 -250 ]
 ]
 */
-
-
