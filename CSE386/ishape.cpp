@@ -41,7 +41,6 @@ void IShape::getTexCoords(const dvec3& pt, double& u, double& v) const {
  */
 
 dvec3 IShape::movePointOffSurface(const dvec3& pt, const dvec3& n) {
-	/* CSE 386 - todo  */
 	return pt + n * EPSILON;
 }
 
@@ -75,12 +74,6 @@ void VisibleIShape::findClosestIntersection(const Ray& ray, OpaqueHitRecord& hit
 			shape->getTexCoords(hit.interceptPt, hit.u, hit.v);
 		}
 	}
-	
-	/* 386 - todo */
-	// hit.t = FLT_MAX;
-	// hit.interceptPt = ORIGIN3D;
-	// hit.normal = Y_AXIS;
-	// hit.material = material;
 }
 
 /**
@@ -129,11 +122,11 @@ TransparentIShape::TransparentIShape(IShapePtr shapePtr, const color& C, double 
  */
 
 void TransparentIShape::findClosestIntersection(const Ray& ray, TransparentHitRecord& hit) const {
-	/* 386 - todo */
-	hit.t = FLT_MAX;
-	hit.interceptPt = ORIGIN3D;
-	hit.normal = Y_AXIS;
-	hit.alpha = 1.0;
+	shape->findClosestIntersection(ray, hit);
+	if (hit.t != FLT_MAX) {
+		hit.transColor = this->c;
+		hit.alpha = this->alpha;
+	}
 }
 
 /**
@@ -147,10 +140,16 @@ void TransparentIShape::findClosestIntersection(const Ray& ray, TransparentHitRe
 
 void TransparentIShape::findIntersection(const Ray& ray, const vector<TransparentIShapePtr>& surfaces,
 	TransparentHitRecord& theHit) {
-	/* CSE 386 - todo  */
+
 	theHit.t = FLT_MAX;
-	theHit.interceptPt = ORIGIN3D;
-	theHit.normal = Y_AXIS;
+
+	for (int i = 0; i < surfaces.size(); i++) {
+		TransparentHitRecord tmpHit;
+		surfaces[i]->findClosestIntersection(ray, tmpHit);
+		if (tmpHit.t != FLT_MAX && tmpHit.t < theHit.t) {
+			theHit = tmpHit;
+		}
+	}
 }
 
 /**
@@ -809,22 +808,43 @@ void ICylinderY::findClosestIntersection(const Ray& ray, HitRecord& hit) const {
 */
 
 void ICylinderY::getTexCoords(const dvec3& pt, double& u, double& v) const {
-	/* CSE 386 - todo  */
 
 	double pointOnCylinder = directionInRadians(center.x, -center.z, pt.x, -pt.z);
-
-	//if (pointOnCylinder > 2 * PI) {
-	//	pointOnCylinder -= PI;
-	//}
 
 	u = map(pointOnCylinder, 0, TWO_PI, 0, 1.0);
 	v = map(pt.y, center.y - length / 2, center.y + length / 2, 0.0, 1.0);
 
-	// space
-
 	v = 1.0 - v;
-	// u = 1.0 - u;
-	// u = v = 0.0;
+}
+
+IClosedCylinderY::IClosedCylinderY()
+	: ICylinderY(ORIGIN3D, 1.0, 2.0) {
+}
+
+IClosedCylinderY::IClosedCylinderY(const dvec3& pos, double rad, double len)
+	: ICylinderY(pos, rad, len) {
+}
+
+void IClosedCylinderY::findClosestIntersection(const Ray& ray, HitRecord& hit) const {
+	HitRecord hits[2];
+
+	ICylinderY::findClosestIntersection(ray, hit);
+
+	IDisk topLid(dvec3(center.x, center.y + length / 2, center.z), dvec3(0, 1, 0), radius);
+
+	topLid.findClosestIntersection(ray, hits[0]);
+
+	if (hits[0].t < hit.t) {
+		hit = hits[0];
+	}
+
+	IDisk bottomLid(dvec3(center.x, center.y - length / 2, center.z), dvec3(0, -1, 0), radius);
+
+	bottomLid.findClosestIntersection(ray, hits[1]);
+
+	if (hits[1].t < hit.t) {
+		hit = hits[1];
+	}
 }
 
 /**

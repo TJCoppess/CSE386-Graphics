@@ -60,8 +60,6 @@ color specularColor(const color& mat, const color& lightColor,
 	/* CSE 386 - todo  */
 
 	return glm::clamp(mat * lightColor * glm::max(0.0, glm::pow(glm::clamp(glm::dot(r,v), 0.0, 1.0), shininess)), 0.0, 1.0);
-
-	return mat;
 }
 
 /**
@@ -174,7 +172,7 @@ bool PositionalLight::pointIsInAShadow(const dvec3& intercept,
 		OpaqueHitRecord hit;
 		object->findClosestIntersection(getShadowFeeler(intercept, normal), hit);
 		if (hit.t != FLT_MAX) {
-			if (glm::distance(intercept, hit.interceptPt) < glm::distance(intercept, this->pos)) {
+			if (hit.t > EPSILON && hit.t < glm::distance(intercept, this->pos)) {
 				return true;
 			}
 		}
@@ -192,7 +190,7 @@ bool PositionalLight::pointIsInAShadow(const dvec3& intercept,
 Ray PositionalLight::getShadowFeeler(const dvec3& interceptWorldCoords,
 	const dvec3& normal) const {
 	/* 386 - todo */
-	dvec3 origin = interceptWorldCoords + EPSILON * normal; // offset ray origin = i + en
+	dvec3 origin = IShape::movePointOffSurface(interceptWorldCoords, normal); // offset ray origin = i + en
 	dvec3 dir = this->pos - interceptWorldCoords; // = light Source - Object intersection
 	Ray shadowFeeler(origin, dir);
 	return shadowFeeler;

@@ -46,7 +46,7 @@ double cameraFOV = glm::radians(120.0);
 
 vector<PositionalLightPtr> lights = {
 						new PositionalLight(dvec3(15, 15, 15), white),
-						new SpotLight(dvec3(-15, 5, 10),
+						new SpotLight(dvec3(-15, 15, 10),
 										dvec3(spotDirX,spotDirY,spotDirZ),
 										glm::radians(90.0),
 										white)
@@ -58,6 +58,7 @@ const int H = 400;
 PositionalLightPtr posLight = lights[0];
 SpotLightPtr spotLight = (SpotLightPtr)lights[1];
 
+
 FrameBuffer frameBuffer(W, H);
 
 RayTracer rayTrace(paleGreen);
@@ -65,28 +66,34 @@ IScene scene;
 
 IPlane* plane = new IPlane(dvec3(0.0, -2.0, 0.0), dvec3(0.0, 1.0, 0.0));
 IPlane* clearPlane = new IPlane(dvec3(0.0, 0.0, MINZ), dvec3(0.0, 0.0, 1.0));
+IPlane* otherPlane = new IPlane(dvec3(0.0, 20.0, 0.0), dvec3(0.0, -1.0, 0.0));
 ISphere* sphere1 = new ISphere(dvec3(0.0, 0.0, 0.0), 4.0);
 IEllipsoid* ellipsoid = new IEllipsoid(dvec3(4, 0, 5), dvec3(1, 1, 2.5));
 ICylinderY* cylinderY = new ICylinderY(dvec3(8.0, 3.0, -2.0), 1.5, 3.0);
+ICylinderY* cylinderYShort = new ICylinderY(dvec3(9.0, 3.0, 0.0), 0.5, 1.0);
+IClosedCylinderY* closedCylinderY = new IClosedCylinderY(dvec3(8.0, 2.0, 1.0), 1, 2.0);
+ITriangle* triangle = new ITriangle(dvec3(0.0, 0.0, 5.0), dvec3(0.0, 5.0, 5.0), dvec3(0.0, 2.5, 7.0));
 IDisk* disk = new IDisk(dvec3(-8, 0, 10), dvec3(1, 0, 0), 3);
 
 void buildScene() {
 	scene.addOpaqueObject(new VisibleIShape(plane, tin));
+	scene.addOpaqueObject(new VisibleIShape(cylinderY, gold, &im1));
+	scene.addOpaqueObject(new VisibleIShape(cylinderYShort, polishedSilver));
+	scene.addOpaqueObject(new VisibleIShape(closedCylinderY, greenPlastic));
+	scene.addOpaqueObject(new VisibleIShape(triangle, brass));
+	scene.addOpaqueObject(new VisibleIShape(disk, redPlastic));
+	scene.addOpaqueObject(new VisibleIShape(sphere1, silver));
+	
 	scene.addTransparentObject(new TransparentIShape(clearPlane, red, 0.25));
 
-	scene.addOpaqueObject(new VisibleIShape(sphere1, silver));
+	// scene.addOpaqueObject(new VisibleIShape(otherPlane, blue));
 	scene.addOpaqueObject(new VisibleIShape(ellipsoid, copper));
 
-	scene.addOpaqueObject(new VisibleIShape(cylinderY, gold, &im1));
-	scene.addOpaqueObject(new VisibleIShape(disk, redPlastic));
-
-	// scene.addOpaqueObject(new VisibleIShape(new IPlane(dvec3(0, 0, 0), dvec3(0, 1, 0)), tin));
-	// scene.addOpaqueObject(new VisibleIShape(new IPlane(dvec3(0, 0, 0), dvec3(0, -1, 0)), tin));
-
-	// scene.addLight(lights[0]);
+	scene.addLight(lights[0]);
 	scene.addLight(lights[1]);
 	lights[1]->isOn = true;
 }
+
 void render(GLFWwindow* window) {
 	if (isAnimated) {
 		z += inc;
@@ -116,7 +123,7 @@ void render(GLFWwindow* window) {
 	double N = 6.0;
 	scene.camera = new PerspectiveCamera(cameraPos, cameraFocus, cameraUp, cameraFOV, width, height);
 	cout << clearPlane->a << endl;
-	rayTrace.raytraceScene(frameBuffer, numReflections, scene);
+	rayTrace.raytraceScene(frameBuffer, numReflections, scene, antiAliasing);
 
 	frameBuffer.showColorBuffer();
 	milliseconds frameEndTime = duration_cast<milliseconds>(
