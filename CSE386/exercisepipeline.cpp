@@ -22,9 +22,9 @@
 
 vector<dvec4> multiplyMatrixAndVertices(const dmat4& M, const vector<dvec4>& verts) {
     vector<dvec4> result;
-    // You may find this helpful. If so, fill this in.
-    // Will resemble your multiplyMatrixAndVertices(const dmat3& M, const vector<dvec3>& verts)
-    // in utilities.cpp
+    for (const dvec4& v : verts) {
+        result.push_back(M * v);
+    }
     return result;
 }
 
@@ -40,14 +40,6 @@ vector<dvec4> cubeVerts = {
     dvec4(1,-1, 1, 1),
 };
 
-vector<dvec4> multiply(const dmat4& M, const vector<dvec4>& verts) {
-    vector<dvec4> result;
-    for (const dvec4& v : verts) {
-        result.push_back(M * v);
-    }
-    return result;
-}
-
 void processVertices(const dmat4& modelMat,
                     const dmat4& viewMat,
                     const dmat4& projMat,
@@ -61,15 +53,15 @@ void processVertices(const dmat4& modelMat,
     cout << "Viewport\n" << viewportMat << endl;
 
     // Stage 1.
-    vector<dvec4> world = multiply(modelMat, verts);            // set world to the proper values
+    vector<dvec4> world = multiplyMatrixAndVertices(modelMat, verts);            // set world to the proper values
     cout << "WORLD COORDINATES\n" << world << endl;
 
     // Stage 2.
-    vector<dvec4> eye = multiply(viewMat, world);              // set eye to the proper values
+    vector<dvec4> eye = multiplyMatrixAndVertices(viewMat, world);              // set eye to the proper values
     cout << "EYE COORDINATES\n" << eye << endl;
 
     // Stage 3.
-    vector<dvec4> projected = multiply(projMat, eye);       // set projected to the proper values
+    vector<dvec4> projected = multiplyMatrixAndVertices(projMat, eye);       // set projected to the proper values
     cout << "PROJECTED COORDINATES\n" << projected << endl;
 
     // Stage 4. Perspective division.
@@ -80,7 +72,7 @@ void processVertices(const dmat4& modelMat,
     cout << "NORMALIZED DEVICE COORDINATES (after perspective division)\n" << ndc << endl;
 
     // Stage 5.
-    vector<dvec4> window = multiply(viewportMat, ndc);        // set window to the proper values
+    vector<dvec4> window = multiplyMatrixAndVertices(viewportMat, ndc);        // set window to the proper values
     cout << "WINDOW COORDINATES\n" << window << endl;
 }
 
