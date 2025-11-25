@@ -172,9 +172,9 @@
     <ClCompile Include="colorandmaterials.cpp" />
     <ClCompile Include="defs.cpp" />
     <ClCompile Include="eshape.cpp" />
+    <ClCompile Include="exercisepipeline.cpp" />
     <ClCompile Include="fragmentops.cpp" />
     <ClCompile Include="framebuffer.cpp" />
-    <ClCompile Include="fullraytrace.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="io.cpp" />
     <ClCompile Include="iscene.cpp" />

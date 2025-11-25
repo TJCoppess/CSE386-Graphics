@@ -45,12 +45,22 @@ EShapeData EShape::createEDisk(const Material& mat, int slices) {
  */
 
 EShapeData EShape::createECylinder(const Material& mat, int slices) {
-	/* CSE 386 - todo  */
 	EShapeData result;
-	dvec4 A(0, 0, 0, 1);
-	dvec4 B(1, 1, 1, 1);
-	dvec4 C(0, 1, 0, 1);
-	VertexData::addTriVertsAndComputeNormal(result, A, B, C, mat);
+
+	double angleInc = TWO_PI / slices;
+
+	for (int i = 0; i < slices; i++) {
+		double A1 = i * angleInc;
+		double A2 = A1 + angleInc;
+		dvec4 A(std::cos(A1), 0.0, std::sin(A1), 1.0);
+		dvec4 B(std::cos(A2), 0.0, std::sin(A2), 1.0);
+		dvec4 C(std::cos(A1), 1.0, std::sin(A1), 1.0);
+		dvec4 D(std::cos(A2), 1.0, std::sin(A2), 1.0);
+		
+		VertexData::addTriVertsAndComputeNormal(result, C, A, B, mat);
+		VertexData::addTriVertsAndComputeNormal(result, C, B, D, mat);
+	}
+
 	return result;
 }
 
@@ -63,8 +73,19 @@ EShapeData EShape::createECylinder(const Material& mat, int slices) {
  */
 
 EShapeData EShape::createECone(const Material& mat, int slices) {
-	/* CSE 386 - todo  */
 	EShapeData result;
+
+	double angleInc = TWO_PI / slices;
+
+	for (int i = 0; i < slices; i++) {
+		double A1 = i * angleInc;
+		double A2 = A1 + angleInc;
+		dvec4 tip(0.0, 1.0, 0.0, 1.0);
+		dvec4 B(std::cos(A1), 0.0, std::sin(A1), 1.0);
+		dvec4 C(std::cos(A2), 0.0, std::sin(A2), 1.0);
+		VertexData::addTriVertsAndComputeNormal(result, tip, C, B, mat);
+	}
+
 	return result;
 }
 
